@@ -1,0 +1,1 @@
+v1.2 新增：完整分類、只找3人以上、只找6人以上、只找10人以上。預設只複製，不動原檔。上傳全部內容到 GitHub 後，在 Actions 執行 Build Windows Portable EXE v1.2。

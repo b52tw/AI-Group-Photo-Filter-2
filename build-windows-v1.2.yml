@@ -1,0 +1,25 @@
+name: Build Windows Portable EXE v1.2
+on:
+  workflow_dispatch:
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - name: Download YuNet
+        shell: powershell
+        run: Invoke-WebRequest -Uri "https://github.com/opencv/opencv_zoo/raw/main/models/face_detection_yunet/face_detection_yunet_2023mar.onnx" -OutFile "face_detection_yunet_2023mar.onnx"
+      - name: Build EXE
+        shell: powershell
+        run: pyinstaller --noconfirm --clean --onefile --windowed --name "AI_Group_Photo_Filter_v1.2_YuNet" --add-data "face_detection_yunet_2023mar.onnx;." ai_group_photo_filter_v1_2.py
+      - name: ZIP
+        shell: powershell
+        run: Compress-Archive -Path "dist\AI_Group_Photo_Filter_v1.2_YuNet.exe" -DestinationPath "AI_Group_Photo_Filter_v1.2_Portable_Windows.zip"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: AI-Group-Photo-Filter-v1.2-Portable-Windows
+          path: AI_Group_Photo_Filter_v1.2_Portable_Windows.zip
